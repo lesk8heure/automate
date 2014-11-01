@@ -34,6 +34,9 @@ pour cela :
 > git clone https://github.com/<ton pseudo>/automate automate
 ça va te copier le repo dans un dossier nommé automate à partir de la ou tu te trouves quand tu lanceras la commande
 
+Puis, tu vas te déplacer dans le dossier nouvellement créé :
+> cd automate
+
 Ensuite, tu vas créer une remote. ça te permettra de rester à jour si des modifications son faites sur le repo principal. On va appeler notre remote upstream
 > git remote add upstream https://github.com/Chantesprit/automate
 > git fetch upstream
