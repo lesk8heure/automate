@@ -1,0 +1,40 @@
+// exemple de fichier de règle complet (sans la partie initialisation de la grille à la fin)
+
+/*
+	On commence par décrire les meta-informations sur le fichier
+*/
+name : Automate de test
+autor : Ebatsin
+description : Fait rebondir une cellule entre 2 murs
+
+/*
+	Puis on définit la grille
+*/
+size : infinite
+bounded : false
+zoom : fit
+
+/*
+	On définit ensuite tous les états de l'automate ainsi que leur couleur si ils peuvent en prendre une
+*/
+STATES :
+murDroite : rgb(0, 255, 255) // le mur de droite sera bleu-vert
+murGauche : rgb(255, 0, 0)
+moving : rgb(128, 128, 128) // la cellule qui se déplacera
+toLeft // à partir de maintenant, on définit des états mais on n'a plus besoin de définir leurs couleurs
+goToLeft
+goToRight
+
+/*
+	Et on termine par définir la règle locale à cette grille
+*/
+RULE :
+murDroite => S : murDroite
+murGauche => S : murGauche
+goToLeft | toLeft => L : moving, L : toLeft
+goToRight | !toLeft => R : moving
+
+/*
+	Ici seront définis les cellules actives par défaut ainsi que leur état
+*/
+ORIGIN :

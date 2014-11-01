@@ -1,0 +1,13 @@
+Découper le travail en 3 parties :
+
+1) Gestion des fichiers de règles
+	- Permettre le chargement d'un fichier de règle
+	- la création d'une grille dépendante d'un fichier de règle
+	- l'initialisation des données de cette grille
+	- la génération du script à executer sur chaque cellule de la grille à l'update
+2) Gestion du simulateur
+	- modification des paramètres de la grille
+	- update de la grille
+3) Gestion de l'interface
+	- permettre les actions présentes sur le cahier des charges
+Faudrait que tout le monde se soit bien familiarisé avec git aussi.
