@@ -84,3 +84,4 @@ Maintenant, je vais réexpliquer ce que je viens de dire, mais sans le code, en 
 9) Si ton code est exempt d'erreurs, il va être ajouté au repo global. Si il y'a des erreurs, ils faudra que tu les corriges, et que tu ajoutes ces corrections à la pull request.
 10) Tu es content. Ton code fonctionne et le projet fonctionne aussi, tu peux aller boire un jus de pomme.
 
+ 
