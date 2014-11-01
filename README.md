@@ -56,15 +56,17 @@ Voilà, tout est prêt pour qu'on puisse bosser proprement.
 
 Tu vas commencer par créer une nouvelle branche :
 
-> git checkout -b <nom de ta branche>
+> git checkout -b nom-de-ta-branche
 
 Tu fais tous tes ajouts dans cette branche. ça permet d'avoir des modifs plus faciles à suivre après
 
 Quand c'est fait, tu ajoutes tous les fichiers que tu as modifiés à l'index de ce qui est à commit :
 
-> git add <tous les fichiers que tu as modifié>
+> git add tous-les-fichiers-que-tu-as-modifié
 
-> git commit -m "<un message court explicatif de ce que représente ton commit>"
+Tu peux faire plusieurs add à la suite
+
+> git commit -m "un message court explicatif de ce que représente ton commit"
 
 > git push -u
 
