@@ -1,6 +1,6 @@
 ## Projet d'automate cellulaire 2D à signaux.
 
-** Toujours branch lorsque vous faites de modifs. On en merge QUE si une autre personne a vérifié le travail et approuvé.**
+ **Toujours branch lorsque vous faites de modifs. On en merge QUE si une autre personne a vérifié le travail et approuvé.**
 
 Rapidement, pour pouvoir bosser tranquilement de chez vous, si vous n'avez jamais utilisé git :
 
@@ -15,9 +15,9 @@ Donc, sur linux
 
 > apt-get install git
 
-> git config --global user.name "<votre pseudo>"
+> git config --global user.name "votre pseudo"
 
-> git config --global user.email "<une adresse email de contact>"
+> git config --global user.email "une adresse email de contact"
 
 Maintenant, tu vas aller sur github, te créer un compte.
 
