@@ -9,6 +9,9 @@ typedef enum Events {
 	Id_quit = 1,
 	Id_loadRule = 2,
 	Id_createRule = 3,
+	Id_createColorRule,
+	Id_createGridRule,
+	Id_createLinkRule,
 	Id_about,
 	Id_editRule,
 	Id_saveRule,
@@ -22,7 +25,13 @@ typedef enum Events {
 	Id_sizeUp,
 	Id_sizeDown,
 	Id_fit,
-	Id_displayCell, Id_helpACS, Id_helpOnline, Id_undo, Id_redo
+	Id_displayGrid,
+	Id_helpACS,
+	Id_helpOnline,
+	Id_undo,
+	Id_redo,
+
+	Id_ANY // sert juste à dire qu'on s'en fout de celle là
 } Events;
 
 class MainWin : public wxFrame {
@@ -49,7 +58,7 @@ class MainWin : public wxFrame {
 		void onSizeup(wxCommandEvent& event);
 		void onSizedown(wxCommandEvent& event);
 		void onFit(wxCommandEvent& event);
-		void onDisplaycell(wxCommandEvent& event);
+		void onToggleGridView(wxCommandEvent& event);
 		void onHelpACS(wxCommandEvent& event);
 		void onHelponline(wxCommandEvent& event);
 		void onAbout(wxCommandEvent& event); 
