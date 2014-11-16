@@ -5,47 +5,54 @@ MainWin::MainWin(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // wxMenu sont des onglets du menu du haut. On peut y ajouter des sous élements
 	wxMenu *menuFile = new wxMenu;
-        menuFile->Append(Id_loadRule, _T("&Charger une règle")); // lors du click sur cet élément, l'evenement d'id Id_loadRule est lancé
-        menuFile->Append(Id_createRule, _T("&Créer une règle"));
-        menuFile->Append(Id_editRule, _T("&Editer une règle"));
-        menuFile->Append(Id_saveRule, _T("&Sauvegarder une règle")); 
+        menuFile->Append(Id_loadRule, _T("&Charger une règle\tCtrl+C")); // lors du click sur cet élément, l'evenement d'id Id_loadRule est lancé
+        
+        wxMenu *newRule = new wxMenu;
+        newRule->Append(Id_createRule, _T("Créer une règle\tCTRL+N"));
+        newRule->Append(Id_createColorRule, _T("Créer une règle de couleur"));
+        newRule->Append(Id_createGridRule, _T("Créer une règle de grille"));
+        newRule->Append(Id_createLinkRule, _T("Lier des règles"));
+
+        menuFile->AppendSubMenu(newRule, _T("&Nouvelle règle"));
+        menuFile->Append(Id_editRule, _T("&Editer une règle\tCtrl+E"));
+        menuFile->Append(Id_saveRule, _T("&Sauvegarder une règle\tCtrl+S")); 
 
         menuFile->AppendSeparator();
 
         menuFile->Append(Id_settings, _T("&Préférences"));
-        menuFile->Append(Id_quit, _T("&Quitter"));
+        menuFile->Append(Id_quit, _T("&Quitter\tCtrl+Q"));
 
     wxMenu *menuEdit = new wxMenu;
-        menuEdit->Append(Id_undo, _T("&Undo"));
-        menuEdit->Append(Id_redo, _T("&Redo")); 
+        menuEdit->Append(Id_undo, _T("&Undo\tCtrl+X"));
+        menuEdit->Append(Id_redo, _T("&Redo\tCtrl+Y")); 
 
     wxMenu *menuControl = new wxMenu; 
-        menuControl->Append(Id_start, _T("&Démarrer"));
+        menuControl->Append(Id_start, _T("&Démarrer\tEnter"));
         menuControl->Append(Id_break, _T("&Pause")); 
-        menuControl->Append(Id_next, _T("&Prochaine etape"));
-        menuControl->Append(Id_reload, _T("&Recharger"));
-        menuControl->Append(Id_speed, _T("&Accélerer"));
-        menuControl->Append(Id_slow, _T("&Slow"));
+        menuControl->Append(Id_next, _T("Prochaine etape\tSpace"));
+        menuControl->Append(Id_reload, _T("Recharger"));
+        menuControl->Append(Id_speed, _T("&Accélerer\tUp"));
+        menuControl->Append(Id_slow, _T("&Ralentir\tDown"));
 
     wxMenu *menuDisplay = new wxMenu; 
-        menuDisplay->Append(Id_sizeUp, _T("&Agrandir"));
-        menuDisplay->Append(Id_sizeDown, _T("&Rétrécir"));
+        menuDisplay->Append(Id_sizeUp, _T("&Agrandir\tCTRL+P"));
+        menuDisplay->Append(Id_sizeDown, _T("&Rétrécir\tCTRL+M"));
         menuDisplay->Append(Id_fit, _T("&Fit")); // Je vois pas comment traduire ça ..
         menuDisplay->AppendSeparator();
-        menuDisplay->Append(Id_displayCell, _T("&Afficher grille")); 
+        menuDisplay->AppendCheckItem(Id_displayGrid, _T("Afficher grille")); 
 
     wxMenu *menuHelp = new wxMenu;
-        menuHelp->Append(Id_helpACS, _T("&Aide ACS"));
-        menuHelp->Append(Id_helpOnline, _T("&Aide en ligne")); // Comme s'il y en avait une
+        menuHelp->Append(Id_helpACS, _T("Aide ACS\tF1"));
+        menuHelp->Append(Id_helpOnline, _T("Aide en ligne")); // Comme s'il y en avait une
         menuHelp->AppendSeparator();
-        menuHelp->Append(Id_about, _T("&A propos"));
+        menuHelp->Append(Id_about, _T("A propos"));
 
     wxMenuBar *menuBar = new wxMenuBar; // la barre de menu tout en haut
         menuBar->Append(menuFile, _T("&Fichiers")); // le nom de chaque onglet
         menuBar->Append(menuEdit, _T("&Edition"));
         menuBar->Append(menuControl, _T("&Controles"));//le menu pour le controle
         menuBar->Append(menuDisplay, _T("&Affichage"));
-        menuBar->Append(menuHelp, _T("&Aide"));
+        menuBar->Append(menuHelp, _T("A&ide"));
 
     SetMenuBar(menuBar); // on assigne notre barre de menu comme la barre de menu de la fenêtre
 
@@ -113,8 +120,8 @@ void MainWin::onFit(wxCommandEvent& WXUNUSED(event)) {
     wxMessageBox(_T("Fit ?"), _T("Fit"), wxOK); 
 }
 
-void MainWin::onDisplaycell(wxCommandEvent& WXUNUSED(event)) {
-    wxMessageBox(_T("Disparu ou pas ?"), _T("Monter la grille"), wxOK); 
+void MainWin::onToggleGridView(wxCommandEvent& WXUNUSED(event)) {
+    // a traiter
 }
 
 void MainWin::onHelpACS(wxCommandEvent& WXUNUSED(event)) {
@@ -155,7 +162,7 @@ BEGIN_EVENT_TABLE(MainWin, wxFrame)
     EVT_MENU(Id_sizeUp, MainWin::onSizeup)
     EVT_MENU(Id_sizeDown, MainWin::onSizedown)
     EVT_MENU(Id_fit, MainWin::onFit)
-    EVT_MENU(Id_displayCell, MainWin::onDisplaycell)
+    EVT_MENU(Id_displayGrid, MainWin::onToggleGridView)
     EVT_MENU(Id_helpACS, MainWin::onHelpACS)
     EVT_MENU(Id_helpOnline, MainWin::onHelponline)
     EVT_MENU(Id_about, MainWin::onAbout)
