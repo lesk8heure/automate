@@ -7,6 +7,7 @@ MainWin::MainWin(const wxString& title, const wxPoint& pos, const wxSize& size)
 	wxMenu *menuFile = new wxMenu;
         menuFile->Append(Id_loadRule, _T("&Charger une règle")); // lors du click sur cet élément, l'evenement d'id Id_loadRule est lancé
         menuFile->Append(Id_createRule, _T("&Créer une règle"));
+            
         menuFile->Append(Id_editRule, _T("&Editer une règle"));
         menuFile->Append(Id_saveRule, _T("&Sauvegarder une règle")); 
 
