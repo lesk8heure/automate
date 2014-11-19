@@ -5,8 +5,9 @@ MainWin::MainWin(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // wxMenu sont des onglets du menu du haut. On peut y ajouter des sous élements
 	wxMenu *menuFile = new wxMenu;
-        menuFile->Append(Id_loadRule, _T("&Charger une règle\tCtrl+C")); // lors du click sur cet élément, l'evenement d'id Id_loadRule est lancé
-        
+        menuFile->Append(Id_loadRule, _T("&Charger une règle\tCtrl+C")); // lors du click sur cet élément, l'evenement d'id Id_loadRule est lance
+
+
         wxMenu *newRule = new wxMenu;
         newRule->Append(Id_createRule, _T("Créer une règle\tCTRL+N"));
         newRule->Append(Id_createColorRule, _T("Créer une règle de couleur"));
@@ -54,6 +55,8 @@ MainWin::MainWin(const wxString& title, const wxPoint& pos, const wxSize& size)
         menuBar->Append(menuDisplay, _T("&Affichage"));
         menuBar->Append(menuHelp, _T("A&ide"));
 
+
+
     SetMenuBar(menuBar); // on assigne notre barre de menu comme la barre de menu de la fenêtre
 
     CreateStatusBar(); // la barre tout en bas. Pas forcément utile.
@@ -65,8 +68,10 @@ void MainWin::onQuit(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void MainWin::onLoad(wxCommandEvent& WXUNUSED(event)) {
-    wxMessageBox(_T("Bon... Là, tu es devant un gestionnaire de fichier. Sisi..."), _T("Charger une règle"), wxOK);
-}
+    //wxString maregle = wxFileSelector(_T("Choisis ta règle"), );
+     wxFileDialog *loadW = new wxFileDialog(this, _T("Choose a file"), _T(""), _T(""),  _T("(*.acr)|*.acr|(*.acc)|*.acc"), wxFD_OPEN | wxFD_MULTIPLE | wxFD_FILE_MUST_EXIST);
+     loadW->ShowModal(); 
+}   
 
 void MainWin::onCreate(wxCommandEvent& WXUNUSED(event)) {
     wxMessageBox(_T("Dat editeur de texte bro !!"), _T("Créateur de règle"), wxOK);
