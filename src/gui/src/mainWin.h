@@ -61,7 +61,9 @@ class MainWin : public wxFrame {
 		void onToggleGridView(wxCommandEvent& event);
 		void onHelpACS(wxCommandEvent& event);
 		void onHelponline(wxCommandEvent& event);
-		void onAbout(wxCommandEvent& event); 
+		void onAbout(wxCommandEvent& event);
+		//Les fonctions
+		void loadToolBar();
 
 	private:
 		DECLARE_EVENT_TABLE()
