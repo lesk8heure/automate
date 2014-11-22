@@ -25,11 +25,15 @@ typedef enum Events {
 	Id_sizeUp,
 	Id_sizeDown,
 	Id_fit,
-	Id_displayGrid,
 	Id_helpACS,
 	Id_helpOnline,
 	Id_undo,
 	Id_redo,
+	Id_help,
+	Id_ret,
+	Id_avanc, 
+	Id_grid,
+	
 
 	Id_ANY // sert juste à dire qu'on s'en fout de celle là
 } Events;
@@ -42,7 +46,7 @@ class MainWin : public wxFrame {
 
 		// les evenements
 		void onQuit(wxCommandEvent& event);
-		void onLoad(wxCommandEvent& event);
+		wxString onLoad(wxCommandEvent& event);
 		void onUndo(wxCommandEvent& event); 
 		void onRedo(wxCommandEvent& event); 
 		void onCreate(wxCommandEvent& event);
@@ -61,7 +65,9 @@ class MainWin : public wxFrame {
 		void onToggleGridView(wxCommandEvent& event);
 		void onHelpACS(wxCommandEvent& event);
 		void onHelponline(wxCommandEvent& event);
-		void onAbout(wxCommandEvent& event);
+		void onAbout(wxCommandEvent& event); 
+		void onAvanc(wxCommandEvent& event);
+		void onRet(wxCommandEvent& event); 
 		//Les fonctions
 		void loadToolBar();
 

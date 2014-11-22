@@ -43,7 +43,7 @@ MainWin::MainWin(const wxString& title, const wxPoint& pos, const wxSize& size)
         menuDisplay->Append(Id_sizeDown, _T("&Rétrécir\tCTRL+M"));
         menuDisplay->Append(Id_fit, _T("&Fit")); // Je vois pas comment traduire ça ..
         menuDisplay->AppendSeparator();
-        menuDisplay->AppendCheckItem(Id_displayGrid, _T("Afficher grille")); 
+        menuDisplay->AppendCheckItem(Id_grid, _T("Afficher grille")); 
 
     wxMenu *menuHelp = new wxMenu;
         menuHelp->Append(Id_helpACS, _T("Aide ACS\tF1"));
@@ -60,7 +60,7 @@ MainWin::MainWin(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     SetMenuBar(menuBar); // on assigne notre barre de menu comme la barre de menu de la fenêtre
 
-    MainWin::loadToolBar();
+    loadToolBar();
     CreateStatusBar(); // la barre tout en bas. Pas forcément utile.
     SetStatusText(_T("Bienvenue sur ACS !"));
     
@@ -70,10 +70,10 @@ void MainWin::onQuit(wxCommandEvent& WXUNUSED(event)) {
 	Close(true); // font chier avec leurs méthodes qui commencent par des majuscules
 }
 
-void MainWin::onLoad(wxCommandEvent& WXUNUSED(event)) {
+wxString MainWin::onLoad(wxCommandEvent& WXUNUSED(event)) {
     //wxString maregle = wxFileSelector(_T("Choisis ta règle"), );
      wxFileDialog *loadW = new wxFileDialog(this, _T("Choose a file"), wxEmptyString, wxEmptyString,  _T("(*.acr)|*.acr|(*.acc)|*.acc"), wxFD_OPEN | wxFD_MULTIPLE | wxFD_FILE_MUST_EXIST);
-     loadW->ShowModal(); 
+     return loadW->GetPath(); 
 }   
 
 void MainWin::onCreate(wxCommandEvent& WXUNUSED(event)) {
@@ -81,13 +81,25 @@ void MainWin::onCreate(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void MainWin::onEditrule(wxCommandEvent& WXUNUSED(event)) {
-    wxMessageBox(_T("Edit Biatch"), _T("Editer la règle"), wxOK);
+    wxFrame* WinEdit  = new wxFrame(this, -1, _T("Edition d'une règle"), wxPoint(50,70), wxSize(600,400));
+    wxToolBar* toolbarEdit = WinEdit->CreateToolBar(wxTB_HORIZONTAL | wxNO_BORDER);
+    wxBitmap imgEdit(_T("img/open.png"), wxBITMAP_TYPE_PNG); 
+    wxBitmap imgSave(_T("img/save.png"), wxBITMAP_TYPE_PNG);
+    wxBitmapButton* bOpen = new wxBitmapButton(toolbarEdit, Id_loadRule, imgEdit);
+    wxBitmapButton* bSave = new wxBitmapButton(toolbarEdit, Id_saveRule, imgSave);
+    toolbarEdit->AddControl(bOpen); 
+    toolbarEdit->AddControl(bSave);
+    wxTextCtrl* editView = new wxTextCtrl(WinEdit, -1, _T(""), wxPoint(0,0), wxSize(-1,-1), wxTE_MULTILINE | 
+        wxHSCROLL | wxTE_LEFT);
+
+    editFrame->Show(true); 
     //Deux choix possible, soit on edit la regle en cours
     //Soi on va chercher une règle à éditer
 
 }
 
 void MainWin::onSaverule(wxCommandEvent& WXUNUSED(event)) {
+
     wxMessageBox(_T("La règle à était sauvegarder"), _T("Sauvegarder la règle"), wxOK);
     //On recupere la source des fichiers (regle etc..) et on les sauvegarde
 
@@ -96,8 +108,18 @@ void MainWin::onSaverule(wxCommandEvent& WXUNUSED(event)) {
 void MainWin::onSettings(wxCommandEvent& WXUNUSED(event)) {
     //wxMessageBox(_T("Vous etes dans la section de paramètres"), _T("Préférences"), wxOK);
     //Creer une nouvelle fenetres avec des options.
-    wxFrame *paramW = new wxFrame(this, 1 , _T("Paramètres"), wxPoint(50,70), wxSize(600,400), wxDEFAULT_FRAME_STYLE , _T("Para")); 
+    wxFrame *paramW = new wxFrame(this, 1 , _T("Paramètres"), wxPoint(50,70), wxSize(600,400)); 
+    wxToolBar* toolbarParam = paramW->CreateToolBar(wxTB_VERTICAL | wxNO_BORDER);
+
+    wxBitmap imgGeneral(_T("img/general.png"), wxBITMAP_TYPE_PNG); 
+    wxBitmapButton *b_general = new wxBitmapButton(toolbarParam, -1, imgGeneral); 
+
+    //toolbarParam->SetMargins(3,3); 
+    toolbarParam->AddControl(b_general); 
+
     paramW->Show(true); 
+
+
 }
 
 void MainWin::onStart(wxCommandEvent& WXUNUSED(event)) {
@@ -161,48 +183,54 @@ void MainWin::onRedo(wxCommandEvent& WXUNUSED(event)) {
     wxMessageBox(_T("La Si Do"), _T("Redo"), wxOK); 
 }
 
+void MainWin::onRet(wxCommandEvent& WXUNUSED(event)) {
+    wxMessageBox(_T("C'est un ballon qui allez vite"), _T("Retour")); 
+}
+
+void MainWin::onAvanc(wxCommandEvent& WXUNUSED(event)) {
+    wxMessageBox(_T("C'est un ballon qui va vite"), _T("Avancer"));
+}
+
+
 void MainWin::loadToolBar(){
 
     //La barre d'outils
-    wxToolBar* toolbar = CreateToolBar(wxNO_BORDER | wxTB_HORIZONTAL, -1, _T("toolBar")); 
+    wxToolBar* toolbar = CreateToolBar(wxTB_HORIZONTAL); 
     //Les images
-    wxBitmap imgOpen(_T("../../img/open.png"), wxBITMAP_TYPE_PNG);
-    wxBitmap imgNewRule(_T("../../img/new.png"), wxBITMAP_TYPE_PNG); 
-    wxBitmap imgEdit(_T("../../img/edit.png"), wxBITMAP_TYPE_PNG); 
-    wxBitmap imgStart(_T("../../img/start.png"), wxBITMAP_TYPE_PNG);
-    wxBitmap imgPause(_T("../../img/pause.png"), wxBITMAP_TYPE_PNG);
-    wxBitmap imgHelp(_T("../../img/help.png"), wxBITMAP_TYPE_PNG); 
-    wxBitmap imgAvanc(_T("../../img/avancer.png"), wxBITMAP_TYPE_PNG); 
-    wxBitmap imgRet(_T("../../img/retour.png"), wxBITMAP_TYPE_PNG); 
-    wxBitmap imgPref(_T("../../img/pref.png"), wxBITMAP_TYPE_PNG); 
+    wxBitmap imgOpen(_T("img/open.png"), wxBITMAP_TYPE_PNG);
+    wxBitmap imgNewRule(_T("img/new.png"), wxBITMAP_TYPE_PNG); 
+    wxBitmap imgEdit(_T("img/edit.png"), wxBITMAP_TYPE_PNG); 
+    wxBitmap imgStart(_T("img/start.png"), wxBITMAP_TYPE_PNG);
+    wxBitmap imgPause(_T("img/pause.png"), wxBITMAP_TYPE_PNG);
+    wxBitmap imgHelp(_T("img/help.png"), wxBITMAP_TYPE_PNG); 
+    wxBitmap imgAvanc(_T("img/avancer.png"), wxBITMAP_TYPE_PNG); 
+    wxBitmap imgRet(_T("img/retour.png"), wxBITMAP_TYPE_PNG); 
+    wxBitmap imgPref(_T("img/pref.png"), wxBITMAP_TYPE_PNG); 
+    wxBitmap imgGrid(_T("img/grid.png"), wxBITMAP_TYPE_PNG); 
     //Les boutons
-    wxBitmapButton *b_open = new wxBitmapButton(toolbar, -1, imgOpen);
+    wxBitmapButton *b_open = new wxBitmapButton(toolbar, Id_loadRule, imgOpen);
     wxBitmapButton *b_newRule = new wxBitmapButton(toolbar, -1, imgNewRule); 
-    wxBitmapButton *b_edit = new wxBitmapButton(toolbar, -1, imgEdit); 
-    wxBitmapButton *b_start = new wxBitmapButton(toolbar, -1, imgStart);
-    wxBitmapButton *b_pause = new wxBitmapButton(toolbar, -1 , imgPause);
-    wxBitmapButton *b_help = new wxBitmapButton(toolbar, -1, imgHelp); 
-    wxBitmapButton *b_avanc = new wxBitmapButton(toolbar, -1, imgAvanc); 
-    wxBitmapButton *b_ret = new wxBitmapButton(toolbar, -1, imgRet); 
-    wxBitmapButton *b_pref = new wxBitmapButton(toolbar, -1, imgPref); 
+    wxBitmapButton *b_edit = new wxBitmapButton(toolbar, Id_editRule, imgEdit); 
+    wxBitmapButton *b_start = new wxBitmapButton(toolbar, Id_start, imgStart);
+    wxBitmapButton *b_pause = new wxBitmapButton(toolbar, Id_break, imgPause);
+    wxBitmapButton *b_help = new wxBitmapButton(toolbar, Id_helpACS, imgHelp); 
+    wxBitmapButton *b_avanc = new wxBitmapButton(toolbar, Id_avanc, imgAvanc); 
+    wxBitmapButton *b_ret = new wxBitmapButton(toolbar,  Id_ret, imgRet); 
+    wxBitmapButton *b_pref = new wxBitmapButton(toolbar, Id_settings, imgPref); 
+    wxBitmapButton *b_grid = new wxBitmapButton(toolbar, Id_grid, imgGrid); 
     
     toolbar->SetMargins(3,3); 
     toolbar->AddControl(b_newRule); 
     toolbar->AddControl(b_open);
     toolbar->AddControl(b_edit);
-
-    toolbar->AddSeparator(); 
-
-    toolbar->AddControl(b_start);
-    toolbar->AddControl(b_pause); 
-
-    toolbar->AddSeparator(); 
-
+    toolbar->AddSeparator();
     toolbar->AddControl(b_ret); 
     toolbar->AddControl(b_avanc); 
-
     toolbar->AddSeparator(); 
-
+    toolbar->AddControl(b_start);
+    toolbar->AddControl(b_pause); 
+    toolbar->AddControl(b_grid); 
+    toolbar->AddSeparator(); 
     toolbar->AddControl(b_pref); 
     toolbar->AddControl(b_help); 
 
@@ -210,7 +238,7 @@ void MainWin::loadToolBar(){
 
 BEGIN_EVENT_TABLE(MainWin, wxFrame)
     EVT_MENU(Id_quit, MainWin::onQuit)
-    EVT_MENU(Id_loadRule, MainWin::onLoad)
+    EVT_MENU(Id_loadRule, wxString MainWin::onLoad)
     EVT_MENU(Id_undo, MainWin::onUndo)
     EVT_MENU(Id_redo, MainWin::onRedo)
     EVT_MENU(Id_createRule, MainWin::onCreate)
@@ -226,9 +254,17 @@ BEGIN_EVENT_TABLE(MainWin, wxFrame)
     EVT_MENU(Id_sizeUp, MainWin::onSizeup)
     EVT_MENU(Id_sizeDown, MainWin::onSizedown)
     EVT_MENU(Id_fit, MainWin::onFit)
-    EVT_MENU(Id_displayGrid, MainWin::onToggleGridView)
+    EVT_MENU(Id_grid, MainWin::onToggleGridView)
     EVT_MENU(Id_helpACS, MainWin::onHelpACS)
     EVT_MENU(Id_helpOnline, MainWin::onHelponline)
     EVT_MENU(Id_about, MainWin::onAbout)
-    EVT_TOOL(Id_helpOnline, MainWin::onHelponline)
-END_EVENT_TABLE()
+    EVT_BUTTON(Id_helpACS, MainWin::onHelpACS)
+    EVT_BUTTON(Id_loadRule, wxString MainWin::onLoad)
+    EVT_BUTTON(Id_editRule, MainWin::onEditrule)
+    EVT_BUTTON(Id_start, MainWin::onStart)
+    EVT_BUTTON(Id_break, MainWin::onBreak)
+    EVT_BUTTON(Id_avanc, MainWin::onAvanc)
+    EVT_BUTTON(Id_ret, MainWin::onRet)
+    EVT_BUTTON(Id_settings, MainWin::onSettings)
+    EVT_BUTTON(Id_grid, MainWin::onToggleGridView)
+END_EVENT_TABLE();
