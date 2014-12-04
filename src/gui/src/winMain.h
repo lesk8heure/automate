@@ -33,6 +33,7 @@ class WinMain : public wxFrame {
 		wxColor pickColor(); // demande à l'utilisateur de choisir une fenêtre
 		void togglePlay(); // active ou désactive la lecture auto
 		void nextStep(); // avance d'un état et update
+		void onDisplayGrid(); 
 
 
 
@@ -43,6 +44,7 @@ class WinMain : public wxFrame {
 
 		// ie : l'evenement associé à onQuit ne signifie pas qu'on a quitté, juste qu'il a été demandé qu'on quitte
 		void onQuit					(wxCommandEvent & event);
+		void onCreateRule			(wxCommandEvent & event); 
 		void onLoadRule				(wxCommandEvent & event);
 		void onEditRule				(wxCommandEvent & event);
 		void onSaveRule				(wxCommandEvent & event);

@@ -3,12 +3,11 @@
 WinMain::WinMain(wxString const& title)
 				: wxFrame((wxFrame*)NULL, wxID_ANY, title, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE) {
 	wxInitAllImageHandlers();
-
 	// on charge les menus
 	loadMenuBar();
 	// la barre d'outils
 	loadToolBar();
-	
+	onDisplayGrid(); 
 	CreateStatusBar();
 	SetStatusText(_T("Bienvenue sur ACS !")); // pas forcément utile pour le moment, mais le deviendra
 
@@ -21,33 +20,56 @@ void WinMain::updateGrid() {
 }
 
 void WinMain::quit() {
-	/* gérer les cas où il faut sauvegarder du contenu non suvegardé */
+	/* gérer les cas où il faut sauvegarder du contenu non sauvegardé */
 	Close();
 }
 
 bool WinMain::loadRule() {
-	/* afficher la fenêtre de chargement d'une règle */
-	/* tout est modal. Retourner la réussite du chargement ou pas */
-
+	//wxString plop = selectFile(); 
+	//if(plop = _T("")) return false; 
+	editFile(selectFile());	
 	return true;
 }
 
 void WinMain::saveCurrentConfig() {
-	/* va demander un nom de fichier à l'utilisateur puis sauvegarder la configuration acutelle de la grille */
+	/* va demander un nom de fichier à l'utilisateur puis sauvegarder la configuration actuelle de la grille */
 }
 
 void WinMain::openPreferences() {
-	/* à faire */
+	//Creer une nouvelle fenetres avec des options.
+    wxFrame *paramW = new wxFrame(this, 1 , _T("Paramètres"), wxPoint(50,70), wxSize(600,400)); //Créer une nouvelle fenetre
+    wxToolBar* toolbarParam = paramW->CreateToolBar(wxTB_VERTICAL | wxNO_BORDER);//
+
+    wxBitmap imgGeneral(_T("img/general.png"), wxBITMAP_TYPE_PNG); 
+    wxBitmapButton *b_general = new wxBitmapButton(toolbarParam, -1, imgGeneral); 
+
+    //toolbarParam->SetMargins(3,3); 
+    toolbarParam->AddControl(b_general); 
+
+    paramW->Show(true); 
 }
 
 void WinMain::editFile(wxString const& filepath) {
 	/* affiche l'editeur de fichier */
+	wxFrame* editFrame = new wxFrame(this, wxID_ANY, _T("Edition"), wxPoint(50,70), wxSize(800,600)); 
+	wxPanel* editPanelDos = new wxPanel(editFrame, wxID_ANY, wxPoint(0,0), wxSize(100,600), wxMAXIMIZE_BOX);
+	//wxPanel* editPanelText = new wxPanel(editFrame, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxMAXIMIZE_BOX); 
+	wxTextCtrl* editText = new wxTextCtrl(editFrame, wxID_ANY, _T("Coucou"), wxPoint(20,0), wxSize(700,600), wxTE_MULTILINE | 
+		wxHSCROLL | wxTE_LEFT);
+	//editSBS->Add(label,0,wxLEFT|wxRIGHT|wxTOP,5); 
+	/*wxBoxSizer* mainsizer = new wxBoxSizer(wxHORIZONTAL); 
+	wxStaticBoxSizer* leftvsizer = new wxStaticBoxSizer(wxVERTICAL, this, _T("Choix du fichier")); 
+	wxStaticText* label = new wxStaticText(editation, wxID_ANY, _T("Fichiers des règles"));
+	leftvsizer->Add(label, 0, wxLEFT | wxRIGHT | wxTOP , 5); 
+	wxTextCtrl* editRuleText = new wxTextCtrl(editation, wxID_ANY, _T(""));
+	leftvsizer->Add(editRuleText,0,wxLEFT|wxRIGHT|wxBOTTOM,5); */
+	editFrame->Show(true); 
 }
 
 wxString WinMain::saveAs(wxString const& format, wxString const& root, wxString const& filename) {
-	wxFileDialog dialog(this, _T("Sauvegarder"), root, filename, format, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
-	dialog.ShowModal();	
-	return dialog.GetFilename();
+	wxFileDialog saveDialog(this, _T("Sauvegarder"), root, filename, format, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+	saveDialog.ShowModal();	
+	return saveDialog.GetFilename();
 }
 
 void WinMain::selectFiles(wxArrayString & str, wxString const& format, wxString const& root) {
@@ -78,6 +100,11 @@ void WinMain::nextStep() {
 	/* à faire */
 }
 
+void WinMain::onDisplayGrid() { 
+	wxColour boum(255,0,0);
+	wxBrush* redBrush = new wxBrush(boum); 
+}
+
 /**************************************************************************/
 /************************ EVENTS *****************************************/
 /************************************************************************/
@@ -86,17 +113,22 @@ void WinMain::onQuit(wxCommandEvent &  WXUNUSED(event)) {
 	quit();
 }
 
+void WinMain::onCreateRule(wxCommandEvent & WXUNUSED(event)) {
+	wxMessageBox(_T("Nouvelle règle crée"), _T("Règle Crée Biatch"));
+}
+
 void WinMain::onLoadRule(wxCommandEvent & WXUNUSED(event)) {
 	if(loadRule()) {
 		wxMessageBox(_T("Le chargement s'est déroulé sans encombre"), _T("Chargement réussi"));
 	}
 	else {		
-		wxMessageBox(_T("Le chargement s'est déroulé sans encombre"), _T("Chargement réussi"));
+		wxMessageBox(_T("Le chargement n'a pas pu se faire."), _T("Chargement non réussi"));
 	}
 }
 
 void WinMain::onEditRule(wxCommandEvent & WXUNUSED(event)) {
-	wxMessageBox(_T("Edition d'une règle"), _T("Edition"));
+	//wxMessageBox(_T("Edition d'une règle"), _T("Edition"));
+	loadRule(); 
 }
 
 void WinMain::onSaveRule(wxCommandEvent & WXUNUSED(event)) {
@@ -233,6 +265,7 @@ void WinMain::loadToolBar() {
 	// déclaration et chargement des images :
 	wxBitmap bmNew(_T("img/new.png"), wxBITMAP_TYPE_PNG);
 	wxBitmap bmEdit(_T("img/edit.png"), wxBITMAP_TYPE_PNG);
+	wxBitmap bmSave(_T("img/save.png"), wxBITMAP_TYPE_PNG); 
 
 	wxBitmap bmPlay(_T("img/play.png"), wxBITMAP_TYPE_PNG);
 	wxBitmap bmPause(_T("img/pause.png"), wxBITMAP_TYPE_PNG);
@@ -245,18 +278,20 @@ void WinMain::loadToolBar() {
 
 	wxToolBar* toolbar = CreateToolBar();
 		// on crée les images
-		wxBitmapButton* bbNew = new wxBitmapButton(toolbar, -1, bmNew);
-		wxBitmapButton* bbEdit = new wxBitmapButton(toolbar, -1, bmEdit);
-		wxBitmapButton* bbPlay = new wxBitmapButton(toolbar, -1, bmPlay);
-		wxBitmapButton* bbPause = new wxBitmapButton(toolbar, -1, bmPause);
-		wxBitmapButton* bbStep = new wxBitmapButton(toolbar, -1, bmStep);
-		wxBitmapButton* bbZoomIn = new wxBitmapButton(toolbar, -1, bmZoomIn);
-		wxBitmapButton* bbZoomOut = new wxBitmapButton(toolbar, -1, bmZoomOut);
-		wxBitmapButton* bbFit = new wxBitmapButton(toolbar, -1, bmFit);
+		wxBitmapButton* bbNew = new wxBitmapButton(toolbar, evt_createRule, bmNew);
+		wxBitmapButton* bbEdit = new wxBitmapButton(toolbar, evt_editRule, bmEdit);
+		wxBitmapButton* bbSave = new wxBitmapButton(toolbar, evt_saveRule, bmSave); 
+		wxBitmapButton* bbPlay = new wxBitmapButton(toolbar, evt_togglePlay, bmPlay);
+		wxBitmapButton* bbPause = new wxBitmapButton(toolbar, evt_togglePlay, bmPause);
+		wxBitmapButton* bbStep = new wxBitmapButton(toolbar, evt_step, bmStep);
+		wxBitmapButton* bbZoomIn = new wxBitmapButton(toolbar, evt_zoomIn, bmZoomIn);
+		wxBitmapButton* bbZoomOut = new wxBitmapButton(toolbar, evt_zoomOut, bmZoomOut);
+		wxBitmapButton* bbFit = new wxBitmapButton(toolbar, evt_zoomFit, bmFit);
 
 		// on les ajoute à la toolbar
 		toolbar->AddControl(bbNew);
 		toolbar->AddControl(bbEdit);
+		toolbar->AddControl(bbSave); 
 
 		toolbar->AddSeparator();
 		toolbar->AddControl(bbPlay);
@@ -275,9 +310,32 @@ void WinMain::loadToolBar() {
 
 
 BEGIN_EVENT_TABLE(WinMain, wxFrame)
+    /*Les événements du menu*/
     EVT_MENU		(evt_quit, WinMain::onQuit) // lors de la demande de fermeture via le menu
+    EVT_MENU		(evt_createRule, WinMain::onCreateRule)
     EVT_MENU		(evt_loadRule, WinMain::onLoadRule) // chargement via le menu
+    EVT_MENU		(evt_settings, WinMain::onSettings) //Ouverture des paramètres via le menu
+    EVT_MENU		(evt_editRule, WinMain::onEditRule) //Ouverture de l'éditeur de règles via le menu
+    EVT_MENU		(evt_saveRule, WinMain::onSaveRule) //Sauvegarde via le menu
+    EVT_MENU		(evt_togglePlay, WinMain::onPlay) //Lance la règle via le menu
+    EVT_MENU		(evt_togglePlay, WinMain::onPause) //Met en pause via le menu
+	EVT_MENU		(evt_step, WinMain::onStep) //Affiche un par un les changements de la grille via le menu
+	EVT_MENU		(evt_zoomIn, WinMain::onZoomIn) //Zoom +
+	EVT_MENU		(evt_zoomOut, WinMain::onZoomOut) //Zoom -
+	EVT_MENU		(evt_zoomFit, WinMain::onZoomFit) //Zoom Adapter à la grille
+	EVT_MENU		(evt_toggleGridDisplay, WinMain::onToggleGridDisplay) //Affiche la grille
     EVT_MENU		(evt_about, WinMain::onAbout) // lorsque qu'on veut des infos supplémentaires
-    EVT_MENU		(evt_helpOnline, WinMain::onHelpOnline)
-    EVT_MENU		(evt_help, WinMain::onHelp)
+    EVT_MENU		(evt_helpOnline, WinMain::onHelpOnline) //Affiche l'aide en ligne
+    EVT_MENU		(evt_help, WinMain::onHelp) //Affiche l'aide en ligne
+
+    /*Les événements pour les boutons*/
+    EVT_BUTTON		(evt_createRule, WinMain::onCreateRule) //Crée une nouvelle règle via la toolbar
+    EVT_BUTTON		(evt_editRule, WinMain::onEditRule) //Ouvre l'editeur via la toolbar
+    EVT_BUTTON 		(evt_saveRule, WinMain::onSaveRule) //Sauvegarde la règle via la toolbar
+    EVT_BUTTON		(evt_togglePlay, WinMain::onPlay) //Lance la règle via la toolbar 
+    EVT_BUTTON		(evt_togglePlay, WinMain::onPause) //Met en pause via la toolbar
+    EVT_BUTTON		(evt_step, WinMain::onStep) //Affiche un par un les changements via la toolbar
+    EVT_BUTTON 		(evt_zoomIn, WinMain::onZoomIn) //Zoom + 
+    EVT_BUTTON		(evt_zoomOut, WinMain::onZoomOut) // Zoom-
+    EVT_BUTTON		(evt_zoomFit, WinMain::onZoomFit) //Zoom adapter à la grille
 END_EVENT_TABLE()
